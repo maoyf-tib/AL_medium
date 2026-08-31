@@ -1,22 +1,20 @@
-\# 项目名称
+# 项目名称
 
-\## 引用说明
+## 引用说明
 
 
 
-\## 安装说明
+## 安装说明
 
 已提供requirements.txt文件，其中包含了用于重新创建实施及代码执行过程中所使用的虚拟环境的全部组件的详细信息。可通过以下命令进行安装：
 
-'''
-
+```bash
 pip install -r requirements.txt
+```
 
-'''
+## 代码文件与分析文件的使用说明
 
-\## 代码文件与分析文件的使用说明
-
-\### 随机样本生成器（value\_combination.py）
+### 随机样本生成器（value\_combination.py）
 
 详细使用说明见代码内的说明即可
 
@@ -24,7 +22,7 @@ pip install -r requirements.txt
 
 
 
-\### 主动学习（tib\_active.py）
+### 主动学习（tib\_active.py）
 
 核心程序使用的是【文献】所开源的METIS中的部分代码。
 
@@ -32,7 +30,7 @@ pip install -r requirements.txt
 
 
 
-\### SHAP分析（SHAP\_titer.ipynb）
+### SHAP分析（SHAP\_titer.ipynb）
 
 详细使用说明见笔记本。并且该笔记本中包含许多额外的分析过程，并没有都在本文中使用，因此可能无法正常执行。此外，产量SHAP分析和经济效益SHAP分析的代码一致，只是需要修改模型目标列，指定模型（如果不是第一次训练），修改需要的绘图参数
 
