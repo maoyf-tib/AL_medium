@@ -39,7 +39,7 @@ def result_preprocess(datafilepath,desired_cols, n_rows=None):
     return data_m, label_m
 
 
-def training_model(datafilepath,outputpath):    
+def training_model(datafilepath,outputpath, random_state=42):
     desired_cols = ['(NH4)2SO4','Triton X-100','Glycine',
                     'CSL-P','NaCl','K2HPO4','Tryptone',
                     'YE','Methionine','Cysteine','NH4OAc',
@@ -51,7 +51,7 @@ def training_model(datafilepath,outputpath):
     aggregated_data_m = pd.concat([aggregated_data_m, data_m]).reset_index(drop=True)
     aggregated_label_m = pd.concat([aggregated_label_m, label_m]).reset_index(drop=True)
 
-    model = XGBRegressor(objective = 'reg:squarederror')
+    model = XGBRegressor(objective = 'reg:squarederror', random_state=random_state)
     # Create the grid search parameter and scoring functions
     param_grid = {
         "learning_rate": [0.01, 0.03, 0.1, 0.3],
@@ -68,7 +68,8 @@ def training_model(datafilepath,outputpath):
         cv=5,
         scoring= 'neg_mean_absolute_error',
         n_jobs=-1,
-        n_iter=200) 
+        n_iter=200,
+        random_state=random_state)
 
     print('RandomSearchCV ...')
 
@@ -76,7 +77,7 @@ def training_model(datafilepath,outputpath):
     results = pd.DataFrame(grid.cv_results_).sort_values('mean_test_score', ascending=False)    
     ensemble_len = 20
     regressors_list = [
-        XGBRegressor(objective='reg:squarederror', **param)
+        XGBRegressor(objective='reg:squarederror', random_state=random_state, **param)
             .fit(aggregated_data_m.values, aggregated_label_m.values.ravel())
         for param in results.params.iloc[:ensemble_len]
     ]
@@ -120,7 +121,9 @@ TRAIN_DATA = PROJECT_ROOT/'Example'/ROUND/"train_data_R1-0+R1-1.csv"
 SAVE_DIR = PROJECT_ROOT/'Example'/ROUND/'output'
 SAVE_DIR.mkdir(exist_ok=True)
 
-training_model(TRAIN_DATA,SAVE_DIR/f"model_{ROUND}.joblib")
+RANDOM_SEED = 42
+
+training_model(TRAIN_DATA, SAVE_DIR/f"model_{ROUND}.joblib", RANDOM_SEED)
 
 df_result = bayesian_optimization(SAVE_DIR/f"model_{ROUND}.joblib",SAVE_DIR/"value_combination.csv",TRAIN_DATA)  
 df_result.to_csv(SAVE_DIR/f"R2_virtual_recipe_{ROUND}.csv", index=False)  

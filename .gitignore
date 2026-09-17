@@ -16,3 +16,6 @@ venv/
 # Operating-system metadata
 .DS_Store
 Thumbs.db
+
+# SHAP
+Example/ALL_data_analysis/SHAP_outputs/
