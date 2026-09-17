@@ -26,9 +26,9 @@ pip install -r requirements.txt
 
 该程序可以通过设置训练集数据路径、候选样本集路径，得到筛选后的20个最优模型集合以及所有候选样本的UCB打分结果
 
-### SHAP分析（SHAP\_titer.ipynb）
+### SHAP分析（SHAP\_titer.ipynb、SHAP\_cost.ipynb）
 
-详细使用说明见笔记本。该笔记本中包含一些额外的分析过程，并没有都在本文中使用。此外，产量SHAP分析和经济效益SHAP分析的代码一致，只是需要修改模型目标列，指定模型或重新训练模型，修改需要的绘图参数。
+详细使用说明见笔记本。该笔记本中包含一些额外的分析过程，并没有都在本文中使用。
 
 该程序可以根据已有数据进行建模，或者使用已有模型，得到基础模型性能评估、SHAP主效应分析、SHAP交互效应分析。
 
@@ -46,4 +46,4 @@ pip install -r requirements.txt
 
 ### 完成后分析
 
-将所有实验结果整理到同一数据表（例如：ALL_exp._results.csv），即可对该表使用SHAP分析（SHAP\_titer.ipynb）与模型分析（model_analysis.ipynb）
+将所有实验结果整理到同一数据表（例如：ALL_exp._results.csv），即可对该表使用SHAP分析与模型分析（model_analysis.ipynb）
