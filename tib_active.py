@@ -100,27 +100,29 @@ def bayesian_optimization(regressors_list_name,
     aggregated_data_m = pd.concat([aggregated_data_m, data_m]).reset_index(drop=True)
     df_main = aggregated_data_m
 
-    df_temp = df_1.copy(deep=True)   
+    df_temp = df_1.copy(deep=True)
     for index, regressor in enumerate(regressors_list):
         df_1['pred_titer_{}'.format(index)] = regressor.predict(df_temp.values)
 
     df_1['regressors_std'] = df_1[[str(i) for i in df_1.columns if 'pred_titer' in str(i)]].std(axis=1)
     df_1['mean_vote'] = df_1[[str(i) for i in df_1.columns if 'pred_titer' in str(i)]].mean(axis=1)
     df_1['UCB'] = exploitation * df_1['mean_vote'] + exploration * df_1['regressors_std']
-    df_1 = df_1.sort_values(['UCB'], ascending=False)  
+    df_1 = df_1.sort_values(['UCB'], ascending=False)
        
     return df_1
 
 
 PROJECT_ROOT = Path.cwd()
-SAVE_DIR = PROJECT_ROOT/'Example'/'Round1'/'output'
+# need to change the path to your own data path
+ROUND = 'Round1'
+TRAIN_DATA = PROJECT_ROOT/'Example'/ROUND/"train_data_R1-0+R1-1.csv"
+
+SAVE_DIR = PROJECT_ROOT/'Example'/ROUND/'output'
 SAVE_DIR.mkdir(exist_ok=True)
-SAVE_MODEL = SAVE_DIR/'model_R1_20260831.joblib'
-TRAIN_DATA = PROJECT_ROOT/'Example'/'Round1'/"train_data_R1-0+R1-1.csv"
 
-training_model(TRAIN_DATA,SAVE_DIR/"model_R1.joblib")
+training_model(TRAIN_DATA,SAVE_DIR/f"model_{ROUND}.joblib")
 
-df_result = bayesian_optimization(SAVE_DIR/"model_R1.joblib",SAVE_DIR/"value_combination.csv",TRAIN_DATA)  
-df_result.to_csv(SAVE_DIR/"R2_virtual_recipe.csv", index=False)  
+df_result = bayesian_optimization(SAVE_DIR/f"model_{ROUND}.joblib",SAVE_DIR/"value_combination.csv",TRAIN_DATA)  
+df_result.to_csv(SAVE_DIR/f"R2_virtual_recipe_{ROUND}.csv", index=False)  
 
 print("successfully finished")

@@ -29,8 +29,8 @@ SAMPLES = 10000
 PROJECT_ROOT = Path.cwd()
 CSV_PATH = PROJECT_ROOT/'Example'/'Round1'/'output'/'value_combination.csv'
 
-# Random seed (data generated with the same seed is reproducible; None means no random seed is specified)
-RANDOMSEED = None
+# Random seed (data generated with the same seed is reproducible; 'None' means no random seed is specified)
+RANDOMSEED = 42
 
 # Sample features and their random ranges
 FEATURES = {
@@ -108,7 +108,7 @@ def generate_samples(samples, features, project_name, seed=None):
 
 
 if __name__ == "__main__" :
-    rows = generate_samples(SAMPLES, FEATURES, PROJECT_NAME, seed=42)
+    rows = generate_samples(SAMPLES, FEATURES, PROJECT_NAME, seed=RANDOMSEED)
     print(rows)
     # Write the generated samples to a CSV file
     pd.DataFrame(rows).to_csv(CSV_PATH, index=False, encoding="utf-8-sig")
