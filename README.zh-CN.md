@@ -20,7 +20,10 @@ pip install -r requirements.txt
 
 ### 主动学习程序（tib\_active.py）
 
-核心程序使用的是【文献】所开源的METIS中的部分代码。
+核心程序使用的开源的METIS中的部分代码[^1]。
+
+[^1]:	PANDI A，DIEHL C，YAZDIZADEH KHARRAZI A，et al. A versatile active learning workflow for optimization of genetic and metabolic networks[J/OL]. Nature Communications，2022，13（1）：3876. [DOI:10.1038/s41467-022-31245-z](https://doi.org/10.1038/s41467-022-31245-z)
+
 
 使用时修改程序下方的对应参数即可。
 

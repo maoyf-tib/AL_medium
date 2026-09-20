@@ -22,7 +22,7 @@ The program generates a specified number of random samples based on the configur
 
 The core program uses portions of the METIS code released as open source by [^1].
 
-[^1]:	PANDI A，DIEHL C，YAZDIZADEH KHARRAZI A，et al. A versatile active learning workflow for optimization of genetic and metabolic networks[J/OL]. Nature Communications，2022，13（1）：3876. [DOI](https://doi.org/10.1038/s41467-022-31245-z)
+[^1]:	PANDI A，DIEHL C，YAZDIZADEH KHARRAZI A，et al. A versatile active learning workflow for optimization of genetic and metabolic networks[J/OL]. Nature Communications，2022，13（1）：3876. [DOI:10.1038/s41467-022-31245-z](https://doi.org/10.1038/s41467-022-31245-z)
 
 
 
