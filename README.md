@@ -1,3 +1,4 @@
+[Chinese Documentation](README.zh-CN.md)
 # Project Name
 
 ## Citation
@@ -52,5 +53,5 @@ After collecting the initial data, use the random sample generator (`value_combi
 
 Combine all experimental results into a single data table, such as `ALL_exp._results.csv`, then use that table for SHAP analysis and model analysis (`model_analysis.ipynb`).
 
-[Chinese Documentation](README.zh-CN.md)
+
 
