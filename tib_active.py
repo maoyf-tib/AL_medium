@@ -26,30 +26,24 @@ plt.rcParams['axes.unicode_minus'] = False
 
 
 
-def result_preprocess(datafilepath,desired_cols, n_rows=None):
+def result_preprocess(datafilepath,desired_cols, target_col ,n_rows=None):
     results = pd.read_csv(datafilepath)
 
     if n_rows is None:
         data_m = results[desired_cols]
         # label_m = results[['protein_rate']]
-        label_m = results[['titer(mg/L)']]
+        label_m = results[[target_col]]
     else:
         data_m = results[desired_cols].iloc[:n_rows, :]        
-        label_m = results[['titer(mg/L)']].iloc[:n_rows, :]
+        label_m = results[[target_col]].iloc[:n_rows, :]
     return data_m, label_m
 
 
-def training_model(datafilepath,outputpath, random_state=42):
-    desired_cols = ['(NH4)2SO4','Triton X-100','Glycine',
-                    'CSL-P','NaCl','K2HPO4','Tryptone',
-                    'YE','Methionine','Cysteine','NH4OAc',
-                    'Glycerol','Na2S2O3','ZnSO4·7H2O','MgSO4·7H2O','FAC']   
-    aggregated_data_m = pd.DataFrame(columns=desired_cols)    
-    aggregated_label_m = pd.DataFrame(columns=['titer(mg/L)'])
-    # aggregated_label_m = pd.DataFrame(columns=['protein_rate'])
-    data_m,label_m= result_preprocess(datafilepath, desired_cols, len(pd.read_csv(datafilepath)))
-    aggregated_data_m = pd.concat([aggregated_data_m, data_m]).reset_index(drop=True)
-    aggregated_label_m = pd.concat([aggregated_label_m, label_m]).reset_index(drop=True)
+def training_model(datafilepath,outputpath,desired_cols, target_col, random_state=42):
+
+    data_m, label_m = result_preprocess(datafilepath, desired_cols, target_col=target_col)
+    aggregated_data_m = data_m.reset_index(drop=True)
+    aggregated_label_m = label_m.reset_index(drop=True)
 
     model = XGBRegressor(objective = 'reg:squarederror', random_state=random_state)
     # Create the grid search parameter and scoring functions
@@ -87,18 +81,17 @@ def training_model(datafilepath,outputpath, random_state=42):
 
 def bayesian_optimization(regressors_list_name,  
                           randomDataSetPath, 
-                          lastrounddataPath,                                                
+                          lastrounddataPath,
+                          target_col,
                           exploitation=1, exploration=1, test_size=100,                                                
                           ):    
    
     regressors_list = joblib.load(regressors_list_name)    
     df_1 = pd.read_csv(randomDataSetPath)
     desired_cols = list(df_1.columns)
-    final_order = desired_cols
 
-    aggregated_data_m = pd.DataFrame(columns=desired_cols)
-    data_m, label_m= result_preprocess(lastrounddataPath, desired_cols, len(pd.read_csv(lastrounddataPath)))
-    aggregated_data_m = pd.concat([aggregated_data_m, data_m]).reset_index(drop=True)
+    data_m, label_m = result_preprocess(lastrounddataPath, desired_cols, target_col=target_col)
+    aggregated_data_m = data_m.reset_index(drop=True)
     df_main = aggregated_data_m
 
     df_temp = df_1.copy(deep=True)
@@ -115,17 +108,30 @@ def bayesian_optimization(regressors_list_name,
 
 PROJECT_ROOT = Path.cwd()
 # need to change the path to your own data path
-ROUND = 'Round1'
-TRAIN_DATA = PROJECT_ROOT/'Example'/ROUND/"train_data_R1-0+R1-1.csv"
+ROUND = 1
+RANDOM_SEED = 42 + ROUND
 
-SAVE_DIR = PROJECT_ROOT/'Example'/ROUND/'output'
+SAVE_DIR = PROJECT_ROOT/'Example'/f'Round{ROUND}'/'output'
 SAVE_DIR.mkdir(exist_ok=True)
 
-RANDOM_SEED = 42
+# Modify parameters based on the round
+TRAIN_DATA = PROJECT_ROOT/'Example'/f'Round{ROUND}'/"train_data_R1-0+R1-1.csv"
+# Round1: train_data_R1-0+R1-1.csv ; Round2: train_data_R1+R2.csv ; Round3: train_data_R1+R2+R3.csv
 
-training_model(TRAIN_DATA, SAVE_DIR/f"model_{ROUND}.joblib", RANDOM_SEED)
+# Modify parameters based on the round
+TARGET_COL = 'EGT titer (mg/L)'
+# R1\R2: 'EGT titer (mg/L)' ; R3: 'EGT efficiency cost (mg /CNY)'
 
-df_result = bayesian_optimization(SAVE_DIR/f"model_{ROUND}.joblib",SAVE_DIR/"value_combination.csv",TRAIN_DATA)  
-df_result.to_csv(SAVE_DIR/f"R2_virtual_recipe_{ROUND}.csv", index=False)  
+DESIREDJ_COLS = ['(NH4)2SO4 (g/L)','Triton X-100 (g/L)','Glycine (g/L)',
+                'CSL-P (g/L)','NaCl (g/L)','K2HPO4 (g/L)','Tryptone (g/L)',
+                'YE (g/L)','Methionine (g/L)','Cysteine (g/L)','NH4OAc (g/L)',
+                'Glycerol (g/L)','Na2S2O3 (g/L)','ZnSO4·7H2O (g/L)','MgSO4·7H2O (g/L)','FAC (g/L)']
+
+
+
+training_model(TRAIN_DATA, SAVE_DIR/f"model_Round{ROUND}.joblib", DESIREDJ_COLS, TARGET_COL, RANDOM_SEED)
+
+df_result = bayesian_optimization(SAVE_DIR/f"model_Round{ROUND}.joblib",SAVE_DIR/"value_combination.csv",TRAIN_DATA, target_col=TARGET_COL)
+df_result.to_csv(SAVE_DIR/f"R2_virtual_recipe_Round{ROUND}.csv", index=False)  
 
 print("successfully finished")

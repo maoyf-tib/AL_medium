@@ -27,31 +27,31 @@ SAMPLES = 10000
 
 # Storage path and filename for the output samples (must include the .csv extension)
 PROJECT_ROOT = Path.cwd()
-CSV_PATH = PROJECT_ROOT/'Example'/'Round1'/'output'/'value_combination.csv'
+ROUND = 3
+CSV_PATH = PROJECT_ROOT/'Example'/f'Round{ROUND}'/'output'/'value_combination.csv'
 
 # Random seed (data generated with the same seed is reproducible; 'None' means no random seed is specified)
-RANDOMSEED = 42
+RANDOMSEED = 42 + ROUND
 
 # Sample features and their random ranges
 FEATURES = {
-    "(NH4)2SO4": {"min": 0, "max": 68, "endpoints": 10, "decimal digits": 0},
-    "Triton X-100": {"min": 0, "max": 53.125, "endpoints": 10, "decimal digits": 0},
-    "Glycine": {"min": 0, "max": 85, "endpoints": 10, "decimal digits": 0},
-    "CSL-P": {"min": 0, "max": 204, "endpoints": 10, "decimal digits": 0},
-    "NaCl": {"min": 17, "max": 51, "endpoints": 10, "decimal digits": 0},
-    "K2HPO4": {"min": 17, "max": 51, "endpoints": 10, "decimal digits": 0},
-    "Tryptone": {"min": 51, "max": 153, "endpoints": 10, "decimal digits": 0},
-    "YE": {"min": 81.6, "max": 244.8, "endpoints": 10, "decimal digits": 0},
-    "Methionine": {"min": 0, "max": 204, "endpoints": 10, "decimal digits": 0},
-    "Cysteine": {"min": 0, "max": 102, "endpoints": 10, "decimal digits": 0},
-    "NH4OAc": {"min": 0, "max": 56.66666667, "endpoints": 10, "decimal digits": 0},
-    "Glycerol": {"min": 42.5, "max": 127.5, "endpoints": 10, "decimal digits": 0},
-    "Na2S2O3": {"min": 10.625, "max": 42.5, "endpoints": 10, "decimal digits": 0},
-    "ZnSO4·7H2O": {"min": 0, "max": 53.125, "endpoints": 10, "decimal digits": 0},
-    "MgSO4·7H2O": {"min": 5.3125, "max": 42.5, "endpoints": 10, "decimal digits": 0},
-    "FAC": {"min": 6.375, "max": 51, "endpoints": 10, "decimal digits": 0}
+    "YE (g/L)": {"min": 12, "max": 36, "endpoints": 10, "decimal digits": 3},
+    "Tryptone (g/L)": {"min": 6, "max": 18, "endpoints": 10, "decimal digits": 3},
+    "NaCl (g/L)": {"min": 1.5, "max": 4.5, "endpoints": 10, "decimal digits": 3},
+    "K2HPO4 (g/L)": {"min": 1, "max": 3, "endpoints": 10, "decimal digits": 3},
+    "MgSO4·7H2O (g/L)": {"min": 0.25, "max": 2, "endpoints": 10, "decimal digits": 3},
+    "Glycerol (g/L)": {"min": 15, "max": 45, "endpoints": 10, "decimal digits": 3},
+    "FAC (g/L)": {"min": 0.03, "max": 0.24, "endpoints": 10, "decimal digits": 3},
+    "Na2S2O3 (g/L)": {"min": 1.5, "max": 6, "endpoints": 10, "decimal digits": 3},
+    "Triton X-100 (g/L)": {"min": 0, "max": 5, "endpoints": 10, "decimal digits": 3},
+    "Glycine (g/L)": {"min": 0, "max": 10, "endpoints": 10, "decimal digits": 3},
+    "NH4OAc (g/L)": {"min": 0, "max": 8, "endpoints": 10, "decimal digits": 3},
+    "CSL-P (g/L)": {"min": 0, "max": 30, "endpoints": 10, "decimal digits": 3},
+    "ZnSO4·7H2O (g/L)": {"min": 0, "max": 2.5, "endpoints": 10, "decimal digits": 3},
+    "Methionine (g/L)": {"min": 0, "max": 6, "endpoints": 10, "decimal digits": 3},
+    "Cysteine (g/L)": {"min": 0, "max": 6, "endpoints": 10, "decimal digits": 3},
+    "(NH4)2SO4 (g/L)": {"min": 0, "max": 8, "endpoints": 10, "decimal digits": 3}
 }
-
 
 
 def generate_samples(samples, features, project_name, seed=None):
